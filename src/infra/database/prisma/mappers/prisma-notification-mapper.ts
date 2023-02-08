@@ -1,15 +1,6 @@
 import { Content } from '@app/entities/content';
 import { Notification } from '@app/entities/notification';
-
-type PrismaNotification = {
-  id: string;
-  content: string;
-  category: string;
-  recipientId: string;
-  readAt: Date | null | undefined;
-  createdAt: Date;
-  cancelledAt: Date | null | undefined;
-};
+import { Notification as PrismaNotification } from '@prisma/client';
 
 export class PrismaNotificationMapper {
   static toPrisma(notification: Notification) {
@@ -20,19 +11,21 @@ export class PrismaNotificationMapper {
       recipientId: notification.recipientId,
       readAt: notification.readAt,
       createdAt: notification.createdAt,
-      cancelledAt: notification.cancelledAt,
+      canceledAt: notification.canceledAt,
     };
   }
 
   static toDomain(raw: PrismaNotification): Notification {
-    return new Notification({
-      id: raw.id,
-      content: new Content(raw.content),
-      category: raw.category,
-      recipientId: raw.recipientId,
-      readAt: raw.readAt,
-      createdAt: raw.createdAt,
-      cancelledAt: raw.cancelledAt,
-    });
+    return new Notification(
+      {
+        content: new Content(raw.content),
+        category: raw.category,
+        recipientId: raw.recipientId,
+        readAt: raw.readAt,
+        createdAt: raw.createdAt,
+        canceledAt: raw.canceledAt,
+      },
+      raw.id,
+    );
   }
 }

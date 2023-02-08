@@ -1,12 +1,12 @@
 import { NotificationsRepositoryInMemory } from '@test/repositories/in-memory-notifications-repository';
-import { CancelNotification } from './cancel-notification';
 import { NotificationNotFound } from './errors/notification-not-found-error';
+import { ReadNotification } from './read-notification';
 import { SendNotification } from './send-notification';
 
-describe('cancel notification', () => {
-  it('shoudl be able to cancel a notification', async () => {
+describe('read notification', () => {
+  it('shoudl be able to read a notification', async () => {
     const notificationsRepository = new NotificationsRepositoryInMemory();
-    const cancelNotification = new CancelNotification(notificationsRepository);
+    const readNotification = new ReadNotification(notificationsRepository);
     const sendNotification = new SendNotification(notificationsRepository);
 
     const request = {
@@ -16,19 +16,21 @@ describe('cancel notification', () => {
     };
     const { notification } = await sendNotification.execute(request);
 
-    await cancelNotification.execute({ notificationId: notification.id });
+    await readNotification.execute({ notificationId: notification.id });
 
-    expect(notificationsRepository.notifications[0].canceledAt).toEqual(
+    expect(notificationsRepository.notifications[0].readAt).toEqual(
       expect.any(Date),
     );
   });
 
-  it('should not be able to cancel a notification that does not exist', async () => {
+  it('should not be able to read a notification that does not exist', async () => {
     const notificationsRepository = new NotificationsRepositoryInMemory();
-    const cancelNotification = new CancelNotification(notificationsRepository);
+    const readNotification = new ReadNotification(notificationsRepository);
 
     expect(() => {
-      return cancelNotification.execute({ notificationId: 'invalid-id' });
+      return readNotification.execute({
+        notificationId: 'facke-notification',
+      });
     }).rejects.toThrow(NotificationNotFound);
   });
 });

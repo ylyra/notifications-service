@@ -12,6 +12,12 @@ export class NotificationsRepositoryInMemory
     );
   }
 
+  async findManyByRecipientId(recipientId: string): Promise<Notification[]> {
+    return this.notifications.filter(
+      (notification) => notification.recipientId === recipientId,
+    );
+  }
+
   async save(notification: Notification): Promise<void> {
     this.notifications = this.notifications.map((n) =>
       n.id === notification.id ? notification : n,

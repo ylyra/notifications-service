@@ -5,4 +5,5 @@ export abstract class NotificationsRepository {
   abstract findById(id: string): Promise<Notification | undefined>;
   abstract save(notification: Notification): Promise<void>;
   abstract countManyByRecipientId(recipientId: string): Promise<number>;
+  abstract findManyByRecipientId(recipientId: string): Promise<Notification[]>;
 }

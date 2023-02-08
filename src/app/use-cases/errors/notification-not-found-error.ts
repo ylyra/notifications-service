@@ -1,4 +1,4 @@
-export class NotificationNotFoundError extends Error {
+export class NotificationNotFound extends Error {
   constructor() {
     super('Notification not found');
   }
